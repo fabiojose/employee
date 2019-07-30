@@ -1,0 +1,30 @@
+{
+  "name": "employee",
+  "version": "1.0.0",
+  "description": "Employee Manager",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabiojose/employee.git"
+  },
+  "keywords": [
+    "employee",
+    "manager",
+    "vue",
+    "express"
+  ],
+  "author": "fabiojose@gmail.com",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/fabiojose/employee/issues"
+  },
+  "homepage": "https://github.com/fabiojose/employee#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pouchdb": "^7.1.1"
+  }
+}
