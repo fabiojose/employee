@@ -126,6 +126,7 @@
   <template id="employee-edit">
     <div>
       <h2>Edit employee</h2>
+      <h3><span>{{ employee.id }}</span></h3>
       <form v-on:submit="updateEmployee">
         <div class="form-group">
           <label for="edit-name">Name</label>
