@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Manager</title>
+  <link rel='stylesheet'
+    href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Employee Manager</h1>
+    <main id="app">
+      <router-view></router-view>
+    </main>
+  </div>
+
+  <template id="login">
+    <div>
+      <div class="note note--down"><p>{{ note }}</p></div>
+      <div class="form-group">
+        <header class="login--header">
+          <span>Log In</span>
+        </header>
+        <section class="login--section">
+          <form class='login--form' @submit.prevent='makeAuth'>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder='account ID' required @focus='inputFocus' />
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" placeholder='password' @focus='inputFocus' required />
+            </div>
+            <div class="form-group">
+              <button type='submit' class="btn btn-primary">Login</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </template>
+
+  <template id="employee">
+    <div>
+      <h2>
+        <span>{{ employee.id }}</span>
+        <span>{{ employee.name }}</span>
+      </h2>
+      <b>Email: </b>
+      <div>{{ employee.email }}</div>
+      <b>Department:</b>
+      <div>{{ employee.department }}</div>
+      <br/>
+      <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+      <a><router-link to="/list">Back to employee list</router-link></a>
+    </div>
+  </template>
+
+  <template id="employee-list">
+    <div>
+      <div class="form-group">
+        <a class="btn btn-default">
+    	  <router-link :to="{path: '/add-employee'}">
+          <span class="glyphicon glyphicon-plus"></span>
+          Add employee
+    	  </router-link>
+        </a>
+      </div>
+
+      <div class="filters row">
+        <div class="form-group col-sm-4">
+          <label for="search-element">Employee name</label>
+          <input v-model="searchKey" class="form-control" id="search-element" requred/>
+        </div>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th class="col-sm-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr v-for="employee in filteredEmployees">
+          <td>{{ employee.id }}</td>
+          <td>
+            <a><router-link :to="{name: 'employee', params: {employee_id: employee.id}}">{{ employee.name }}</router-link></a>
+          </td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.department }}</td>
+          <td>
+    	      <a class="btn btn-warning btn-xs"><router-link :to="{name: 'employee-edit', params: {employee_id: employee.id}}">Edit</router-link></a>
+            <a class="btn btn-danger btn-xs"><router-link :to="{name: 'employee-delete', params: {employee_id: employee.id}}">Delete</router-link></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </template>
+
+  <template id="add-employee">
+    <div>
+      <h2>Add new employee</h2>
+      <form v-on:submit="createEmployee">
+        <div class="form-group">
+          <label for="add-name">Name</label>
+          <input class="form-control" id="add-name" v-model="employee.name" required/>
+        </div>
+        <div class="form-group">
+          <label for="add-email">Email</label>
+          <input class="form-control" id="add-email" rows="10" v-model="employee.email" required/>
+        </div>
+        <div class="form-group">
+          <label for="add-department">Department</label>
+          <input class="form-control" id="add-department" v-model="employee.department" required/>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a class="btn btn-default"><router-link to="/list">Cancel</router-link></a>
+      </form>
+    </div>
+  </template>
+
+  <template id="employee-edit">
+    <div>
+      <h2>Edit employee</h2>
+      <form v-on:submit="updateEmployee">
+        <div class="form-group">
+          <label for="edit-name">Name</label>
+          <input class="form-control" id="edit-name" v-model="employee.name" required/>
+        </div>
+        <div class="form-group">
+          <label for="edit-email">Email</label>
+          <input type="email" class="form-control" id="edit-email" rows="3" v-model="employee.email" required/>
+        </div>
+        <div class="form-group">
+          <label for="edit-department">Department</label>
+          <input class="form-control" id="edit-department" v-model="employee.department" required/>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-default"><router-link to="/list">Cancel</router-link></a>
+      </form>
+    </div>
+  </template>
+
+  <template id="employee-delete">
+    <div>
+    <h2>Delete employee {{ employee.name }}</h2>
+    <form v-on:submit="deleteEmployee">
+      <p>The action cannot be undone.</p>
+      <button type="submit" class="btn btn-danger">Delete</button>
+      <a class="btn btn-default"><router-link to="/list">Cancel</router-link></a>
+    </form>
+    </div>
+  </template>
+
+  <script src='https://unpkg.com/vue@2.0.0/dist/vue.js'></script>
+  <script src='https://unpkg.com/vue-router@2.0.0/dist/vue-router.js'></script>
+  <script src="./app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+.note {
+  color: #FF9E80;
+  padding: .75rem 1.5rem;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 100%;
+  width: 93%;
+  z-index: 0;
+  transition: all .2s ease-out;
+}
+
+.note--down {
+  transform: translateY(100%);
+}
+
+.note--up {
+  transform: translateY(0);
+}
+
+.login {
+  z-index: 1;
+  position: relative;
+  background: white;
+  padding: .75rem 1.5rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.login--header {
+  margin-bottom: 1rem;
+}
+
+.login--header span {
+  font-size: 2rem;
+}
+
+.line {
+  transform: translate(0, -1rem);
+  stroke-width: 1;
+}
+
+.line--default {
+  stroke: #ccc;
+  transition: all .2s ease-out;
+}
