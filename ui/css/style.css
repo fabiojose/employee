@@ -32,13 +32,3 @@
 .login--header span {
   font-size: 2rem;
 }
-
-.line {
-  transform: translate(0, -1rem);
-  stroke-width: 1;
-}
-
-.line--default {
-  stroke: #ccc;
-  transition: all .2s ease-out;
-}
