@@ -7,20 +7,6 @@ var {
 
 var router = express.Router();
 
-/*
-var dbAdapter = process.env.DB_ADAPTER || "leveldb";
-console.log("> db adapter:", dbAdapter);
-
-if(dbAdapter === "memory") {
-  PouchDB.plugin(require("pouchdb-adapter-memory"));
-}
-
-// Opens or creates the database
-const db = new PouchDB("employeedb", {
-  adapter: dbAdapter
-});
-*/
-
 // Create Employee
 router.post("/employee", (req, res) => {
 
