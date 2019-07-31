@@ -7,7 +7,7 @@ const { db } = require("../db.js");
 
 describe("Employee API", () => {
   describe("POST /api/employee", () => {
-    it("should response 201 when everything ok", (done) => {
+    it("should response 201 code when everything ok", (done) => {
       // setup
       let employee = {
         id : "0x1",
@@ -28,7 +28,7 @@ describe("Employee API", () => {
         });
     });
 
-    it("should response 400 when try to post same id", (done) => {
+    it("should response 400 code when try to post same id", (done) => {
       // setup
       db.put({
         _id : "0x1",
@@ -57,7 +57,7 @@ describe("Employee API", () => {
       });
     });
 
-    it("should response 201 when try to post another id", (done) => {
+    it("should response 201 code when try to post another id", (done) => {
       // setup
       db.put({
         _id : "0x1",
@@ -120,6 +120,93 @@ describe("Employee API", () => {
           });
       })
       .catch(done);
+    });
+
+    it("should return an empty list when there is no employees", (done) => {
+      // act & assert
+      supertest(app)
+        .get("/api/employee")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.length).to.equal(0);
+        })
+        .end(done);
+    });
+  });
+
+  describe("GET /api/employee/:id", () => {
+    it("should return the right employee using its ID", (done) => {
+      // setup
+      let employee = {
+        id : "0x5",
+        name : "Suzana Herculano-Houzel",
+        email: "suzana@server.com",
+        department: "Neurociência"
+      };
+
+      db.put({
+        _id : employee.id,
+        name : employee.name,
+        email: employee.email,
+        department: employee.department
+      })
+      .then(() => {
+        // act & assert
+        supertest(app)
+          .get("/api/employee/0x5")
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .expect((res) => {
+            expect(res.body).to.deep.equal(employee);
+          })
+          .end((err, res) => {
+            cleanup(["0x5"], err, res, done);
+          });
+      })
+      .catch(done);
+    });
+
+    it("should response 404 code when using a non-existent id", (done) => {
+      // act & assert
+      supertest(app)
+        .get("/api/employee/0x100")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(404)
+        .end(done);
+    });
+  });
+
+  describe("DELETE /api/employee/:id", () => {
+    it("should response 204 code when delete succeeded", (done) => {
+      // setup
+      db.put({
+        _id : "0x6",
+        name : "foo",
+        email: "foo@server.com",
+        department: "bar"
+      })
+      .then(() => {
+        // act & assert
+        supertest(app)
+          .delete("/api/employee/0x6")
+          .set("Accept", "application/json")
+          .expect(204)
+          .end(done);
+      })
+      .catch(done);
+    });
+
+    it("should response 404 code when using a non-existent id", (done) => {
+      // act & assert
+      supertest(app)
+        .delete("/api/employee/0x100")
+        .set("Accept", "application/json")
+        .expect(404)
+        .end(done);
     });
   });
 });
