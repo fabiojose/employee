@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "DB_ADAPTER=memory ./node_modules/.bin/mocha ./tests --recursive -C"
+    "test": "ADMIN_USER=acme ADMIN_PASS=4cme DB_ADAPTER=memory ./node_modules/.bin/mocha ./tests --recursive -C"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,10 @@
   "homepage": "https://github.com/fabiojose/employee#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "pouchdb": "^7.1.1"
+    "passport": "^0.4.0",
+    "passport-http": "^0.3.0",
+    "pouchdb": "^7.1.1",
+    "rand-token": "^0.4.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
