@@ -31,3 +31,23 @@ will guarantee the persistent data if you remove the container.
 
 But, if you are starting it without docker, do not delete the `employeedb`
 directory, that will be created on the very first run.
+
+## To test
+
+If you have node installed in your pc, run the following command:
+
+```sh
+npm test
+```
+
+And you will something like bellow:
+
+```txt
+Employee API
+  POST /api/employee
+    ✓ should response 201 when everything ok (64ms)
+    ✓ should response 400 when try to post same id
+    ✓ should response 201 when try to post another id
+  GET /api/employee
+    ✓ should return all documents
+```
