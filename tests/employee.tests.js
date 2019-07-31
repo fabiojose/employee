@@ -5,7 +5,29 @@ const { cleanup } = require("./utils.js");
 const app = require("../app.js");
 const { db } = require("../db.js");
 
+var apitoken;
+
 describe("Employee API", () => {
+  before((done) => {
+    supertest(app)
+      .post("/api/login")
+      .set("Accept", "application/json")
+      .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
+      .expect(200)
+      .end((err, res) => {
+        if(err){
+          done(err);
+        } else {
+          apitoken = res.body.apitoken;
+          done();
+        }
+      });
+  });
+
+  after((done) => {
+    done();
+  });
+
   describe("POST /api/employee", () => {
     it("should response 201 code when everything ok", (done) => {
       // setup
@@ -19,6 +41,7 @@ describe("Employee API", () => {
       // act & assert
       supertest(app)
         .post("/api/employee")
+        .set("x-apitoken", apitoken)
         .set("Accept", "application/json")
         .send(employee)
         .expect("Content-Type", /json/)
@@ -47,6 +70,7 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .post("/api/employee")
+          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
           .send(employee)
           .expect("Content-Type", /json/)
@@ -76,6 +100,7 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .post("/api/employee")
+          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
           .send(employee)
           .expect("Content-Type", /json/)
@@ -109,6 +134,7 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .get("/api/employee")
+          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
           .expect("Content-Type", /json/)
           .expect(200)
@@ -126,6 +152,7 @@ describe("Employee API", () => {
       // act & assert
       supertest(app)
         .get("/api/employee")
+        .set("x-apitoken", apitoken)
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(200)
@@ -156,6 +183,7 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .get("/api/employee/0x5")
+          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
           .expect("Content-Type", /json/)
           .expect(200)
@@ -173,6 +201,7 @@ describe("Employee API", () => {
       // act & assert
       supertest(app)
         .get("/api/employee/0x100")
+        .set("x-apitoken", apitoken)
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(404)
@@ -193,6 +222,7 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .delete("/api/employee/0x6")
+          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
           .expect(204)
           .end(done);
@@ -204,6 +234,7 @@ describe("Employee API", () => {
       // act & assert
       supertest(app)
         .delete("/api/employee/0x100")
+        .set("x-apitoken", apitoken)
         .set("Accept", "application/json")
         .expect(404)
         .end(done);
