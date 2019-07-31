@@ -32,6 +32,13 @@ will guarantee the persistent data if you remove the container.
 But, if you are starting it without docker, do not delete the `employeedb`
 directory, that will be created on the very first run.
 
+## Why I choose node?
+
+I answer with one word: **flexibility**
+
+I have more than seven years on java, but for this kind of project, I like the
+way that node allows me to write the stuff.
+
 ## To test
 
 If you have node installed in your pc, run the following command:
