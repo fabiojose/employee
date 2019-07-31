@@ -11,6 +11,23 @@ username: admin
 password: adm1n
 ```
 
-## Start Using Docker
+## Starting Using Docker
 
-## Start Without Docker
+## Starting Without Docker
+
+> make sure you have the port `3000` free to use at your pc
+
+- install node
+- run `npm install` to download the dependencies
+- run `npm start` to start the app
+- open `http://localhost:3000` at your browser
+
+## Notes About the Database
+
+We are using the [pouchdb](https://pouchdb.com/), which is based on
+[leveldb](https://github.com/google/leveldb). If your are starting this app
+using Docker, please, take care about the `/data` volume mapping, that concern
+will guarantee the persistent data if you remove the container.
+
+But, if you are starting it without docker, do not delete the `employeedb`
+directory, that will be created on the very first run.
