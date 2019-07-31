@@ -1,9 +1,15 @@
 var express = require("express");
 
-var auth = require("./routes/auth.js");
+var {
+  login,
+  accessControl
+} = require("./routes/auth.js");
 var employee = require("./routes/employee.js");
 
 var app = express();
+
+// Enable access control using apitoken
+app.use(accessControl);
 
 // Serving statics
 app.use(express.static("ui"));
@@ -13,6 +19,6 @@ app.use(express.json());
 
 // Attaching the api routers
 app.use("/api", employee);
-app.use("/api/auth", auth);
+app.use("/api", login);
 
 module.exports = app;
