@@ -9,6 +9,8 @@ var router = express.Router();
 
 // Create Employee
 router.post("/employee", (req, res) => {
+  console.log("> > > POST ");
+  console.log(req.body);
 
   let employee = req.body;
   db.put({
@@ -33,6 +35,8 @@ router.post("/employee", (req, res) => {
 
 // Read Employees
 router.get("/employee", (req, res) => {
+  console.log("> > > GET all");
+
   return db.allDocs({
     include_docs: true
   })
@@ -61,6 +65,8 @@ router.get("/employee", (req, res) => {
 
 // Read Employee by id
 router.get("/employee/:id", (req, res) => {
+  console.log("> > > GET", req.params.id);
+
   return db.get(req.params.id)
     .then((doc) => {
       res.status(200).json({
@@ -80,6 +86,8 @@ router.get("/employee/:id", (req, res) => {
 
 // Delete Employee
 router.delete("/employee/:id", (req, res) => {
+  console.log("> > > DELETE", req.params.id);
+
   return del([req.params.id])
     .then((result) => {
       if(!result || result.length == 0){
