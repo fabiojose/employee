@@ -21,11 +21,28 @@ This is just for fun! :smiley:
 
 ## Starting Using Docker
 
+> make sure you have `docker` installed and the port `3000` free to use
+
+Docker minimal version: `18.09.8`
+
+**Build**
+
+```bash
+docker build . -t employee:1.0.0
+```
+
+**Run**
+
+```bash
+docker run -p 3000:3000 \
+       -v employee_data:/var/app/employeedb \
+       employee:1.0.0
+```
+
 ## Starting Without Docker
 
-> make sure you have the port `3000` free to use at your pc
+> make sure you have `node` installed and the port `3000` free to use
 
-- install node
 - run `npm install` to download the dependencies
 - run `npm start` to start the app
 - open `http://localhost:3000` at your browser
