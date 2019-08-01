@@ -127,7 +127,6 @@ var Employee = Vue.extend({
 var EmployeeEdit = Vue.extend({
   template: '#employee-edit',
   data: function () {
-    // employee: findEmployee(this.$route.params.employee_id)
     return {
       employee: {
         name: '',
@@ -138,14 +137,26 @@ var EmployeeEdit = Vue.extend({
   },
   methods: {
     updateEmployee: function () {
-      let employee = this.employee; //var employee = this.$get('employee');
+      let employee = this.employee;
+      /*
       employees[findEmployeeKey(employee.id)] = {
         id: employee.id,
         name: employee.name,
         email: employee.email,
         department: employee.department
       };
-      router.push(MAIN);
+      */
+      axios.put("api/employee", {
+        id: employee.id,
+        name: employee.name,
+        email: employee.email,
+        department: employee.department
+      })
+      .then((res) => {
+
+        router.push(MAIN);
+      })
+      .catch(console.log);
     }
   },
   mounted() {
@@ -173,7 +184,6 @@ var EmployeeDelete = Vue.extend({
   },
   methods: {
     deleteEmployee: function () {
-      //employees.splice(findEmployeeKey(this.$route.params.employee_id), 1);
       axios.delete("api/employee/" + this.$route.params.employee_id)
         .then((res) => {
           router.push(MAIN);
@@ -206,7 +216,7 @@ var AddEmployee = Vue.extend({
   },
   methods: {
     createEmployee: function() {
-      let employee = this.employee; //var employee = this.$get('employee');
+      let employee = this.employee;
 
       axios.post("/api/employee",{
         id: Math.random().toString().split('.')[1],

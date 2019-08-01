@@ -33,6 +33,39 @@ router.post("/employee", (req, res) => {
   });
 });
 
+// Update Employee
+// TODO testing
+router.put("/employee", (req, res) => {
+  console.log("> > > PUT");
+  console.log(req.body);
+
+  let employee = req.body;
+
+  return db.get(employee.id)
+    .then((doc) => {
+      return db.put({
+        _id : employee.id,
+        _rev : doc._rev,
+        name : employee.name,
+        email : employee.email,
+        department : employee.department
+      })
+      .then((result) => {
+        res.status(201).json({
+          code: 201,
+          message: "Record updated"
+        });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(err.status).json({
+        code: err.status,
+        message: err.message
+      });
+    });
+});
+
 // Read Employees
 router.get("/employee", (req, res) => {
   console.log("> > > GET all");
