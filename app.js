@@ -1,24 +1,47 @@
 var express = require("express");
+var passport = require("passport");
+var BasicStrategy = require("passport-http").BasicStrategy;
 
-var {
-  login,
-  accessControl
-} = require("./routes/auth.js");
 var employee = require("./routes/employee.js");
 
-var app = express();
+const app = express();
 
-// Enable access control using apitoken
-app.use(accessControl);
+// Enable basic security
+const user = process.env.ADMIN_USER || "admin";
+const pass = process.env.ADMIN_PASS || "adm1n";
+
+passport.use(new BasicStrategy(
+  (username, password, cb) => {
+    if(user === username && pass === password){
+      cb(null, {
+        username : username,
+        email : username + "@mailserver.com"
+      });
+    } else {
+      cb(null, false);
+    }
+  }
+));
+
+app.get("/",
+  passport.authenticate("basic", {
+    session: false,
+    successRedirect : "/app"
+  }),
+  (req, res) => {
+    res.json({
+      username: req.user.username,
+      email: req.user.value
+    });
+  });
 
 // Serving statics
-app.use(express.static("ui"));
+app.use("/app", express.static("ui"));
 
 // Parsing the request body as JSON
 app.use(express.json());
 
-// Attaching the api routers
-app.use("/api", employee);
-app.use("/api", login);
+// Attaching the API routers
+app.use("/app/api", employee);
 
 module.exports = app;

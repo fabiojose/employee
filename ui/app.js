@@ -1,8 +1,4 @@
-var employees = [
-  {id: 1, name: 'Angular', email: 'Superheroic JavaScript MVW Framework.', department: "Mobile"},
-  {id: 2, name: 'Ember', email: 'A framework for creating ambitious web applications.', department: "Architecture"},
-  {id: 3, name: 'React', email: 'A JavaScript Library for building user interfaces.', department: "ecomerce"}
-];
+var employees = [];
 
 const EMPTY_RECORD = {
   id: '',
@@ -11,8 +7,7 @@ const EMPTY_RECORD = {
   department: ''
 };
 
-const MAIN = "/list";
-var apitoken;
+const MAIN = "/";
 
 function findEmployee (employeeId) {
   return employees[findEmployeeKey(employeeId)];
@@ -25,53 +20,6 @@ function findEmployeeKey (employeeId) {
     }
   }
 };
-
-var Login = Vue.extend({
-  template: '#login',
-  data: function() {
-    return {
-      note: "",
-      user: {
-        name: "",
-        pass: ""
-      }
-    };
-  },
-  watch: {
-    note() {
-      const note = document.querySelector('.note');
-      if (this.note.length) {
-        note.classList.add('note--up');
-      } else {
-        note.classList.remove('note--up');
-        note.classList.add('note--down');
-      }
-    }
-  },
-  methods: {
-    makeAuth(e) {
-      let self = this;
-      let basic = base64.encode(this.user.name + ":" + this.user.pass);
-
-      axios.post("api/login", {
-        headers : {
-          "Authorization": "Basic " + basic
-        }
-      })
-      .then((res) => {
-        console.log(res.data);
-        apitoken = res.data.apitoken;
-        router.push(MAIN);
-      })
-      .catch((err) => {
-        self.note = 'Login failed';
-      });
-    },
-    inputFocus() {
-      this.note = '';
-    }
-  }
-});
 
 var List = Vue.extend({
   template: '#employee-list',
@@ -115,7 +63,6 @@ var Employee = Vue.extend({
   mounted() {
     axios.get("api/employee/" + this.$route.params.employee_id)
       .then((res) => {
-        console.log(res);
         this.employee = res.data;
       })
       .catch((err) => {
@@ -138,14 +85,7 @@ var EmployeeEdit = Vue.extend({
   methods: {
     updateEmployee: function () {
       let employee = this.employee;
-      /*
-      employees[findEmployeeKey(employee.id)] = {
-        id: employee.id,
-        name: employee.name,
-        email: employee.email,
-        department: employee.department
-      };
-      */
+
       axios.put("api/employee", {
         id: employee.id,
         name: employee.name,
@@ -153,7 +93,6 @@ var EmployeeEdit = Vue.extend({
         department: employee.department
       })
       .then((res) => {
-
         router.push(MAIN);
       })
       .catch(console.log);
@@ -162,12 +101,9 @@ var EmployeeEdit = Vue.extend({
   mounted() {
     axios.get("api/employee/" + this.$route.params.employee_id)
       .then((res) => {
-        console.log(res);
         this.employee = res.data;
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.log);
   }
 });
 
@@ -194,12 +130,9 @@ var EmployeeDelete = Vue.extend({
   mounted() {
     axios.get("api/employee/" + this.$route.params.employee_id)
       .then((res) => {
-        console.log(res);
         this.employee = res.data;
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.log);
   }
 });
 
@@ -218,7 +151,7 @@ var AddEmployee = Vue.extend({
     createEmployee: function() {
       let employee = this.employee;
 
-      axios.post("/api/employee",{
+      axios.post("api/employee",{
         id: Math.random().toString().split('.')[1],
         name: employee.name,
         email: employee.email,
@@ -226,22 +159,21 @@ var AddEmployee = Vue.extend({
       })
       .then((res) => {
         router.push(MAIN);
-      });
+      })
+      .catch(console.log);
     }
   }
 });
 
 var router = new VueRouter({
 	routes: [
-    {path: '/', component: Login},
-		{path: MAIN, component: List},
+		{path: '/', component: List},
 		{path: '/employee/:employee_id', component: Employee, name: 'employee'},
 		{path: '/add-employee', component: AddEmployee},
 		{path: '/employee/:employee_id/edit', component: EmployeeEdit, name: 'employee-edit'},
 		{path: '/employee/:employee_id/delete', component: EmployeeDelete, name: 'employee-delete'}
 	]
 });
-
 
 var App = {}
 

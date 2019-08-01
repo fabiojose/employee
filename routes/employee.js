@@ -1,5 +1,6 @@
 var PouchDB = require("pouchdb");
 var express = require("express");
+
 var {
   db,
   del
@@ -69,6 +70,7 @@ router.put("/employee", (req, res) => {
 // Read Employees
 router.get("/employee", (req, res) => {
   console.log("> > > GET all");
+  console.log(req.headers);
 
   return db.allDocs({
     include_docs: true

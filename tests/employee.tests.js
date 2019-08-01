@@ -9,10 +9,11 @@ var apitoken;
 
 describe("Employee API", () => {
   before((done) => {
+    /*
     supertest(app)
       .post("/api/login")
       .set("Accept", "application/json")
-      .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
+      .auth("admin", process.env.ADMIN_PASS)
       .expect(200)
       .end((err, res) => {
         if(err){
@@ -22,6 +23,8 @@ describe("Employee API", () => {
           done();
         }
       });
+    */
+    done();
   });
 
   after((done) => {
@@ -41,8 +44,8 @@ describe("Employee API", () => {
       // act & assert
       supertest(app)
         .post("/api/employee")
-        .set("x-apitoken", apitoken)
         .set("Accept", "application/json")
+        .auth("admin", process.env.ADMIN_PASS)
         .send(employee)
         .expect("Content-Type", /json/)
         .expect(201)
@@ -70,8 +73,8 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .post("/api/employee")
-          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
+          .auth("admin", process.env.ADMIN_PASS)
           .send(employee)
           .expect("Content-Type", /json/)
           .expect(409)
@@ -100,8 +103,8 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .post("/api/employee")
-          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
+          .auth("admin", process.env.ADMIN_PASS)
           .send(employee)
           .expect("Content-Type", /json/)
           .expect(201)
@@ -113,6 +116,13 @@ describe("Employee API", () => {
     });
   });
 
+/*
+  describe("PUT /api/employee", () => {
+    it("", (done) => {
+
+    });
+  });
+*/
   describe("GET /api/employee", () => {
     it("should return all documents", (done) => {
       // setup
@@ -134,8 +144,8 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .get("/api/employee")
-          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
+          .auth("admin", process.env.ADMIN_PASS)
           .expect("Content-Type", /json/)
           .expect(200)
           .expect((res) => {
@@ -152,8 +162,8 @@ describe("Employee API", () => {
       // act & assert
       supertest(app)
         .get("/api/employee")
-        .set("x-apitoken", apitoken)
         .set("Accept", "application/json")
+        .auth("admin", process.env.ADMIN_PASS)
         .expect("Content-Type", /json/)
         .expect(200)
         .expect((res) => {
@@ -183,8 +193,8 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .get("/api/employee/0x5")
-          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
+          .auth("admin", process.env.ADMIN_PASS)
           .expect("Content-Type", /json/)
           .expect(200)
           .expect((res) => {
@@ -201,8 +211,8 @@ describe("Employee API", () => {
       // act & assert
       supertest(app)
         .get("/api/employee/0x100")
-        .set("x-apitoken", apitoken)
         .set("Accept", "application/json")
+        .auth("admin", process.env.ADMIN_PASS)
         .expect("Content-Type", /json/)
         .expect(404)
         .end(done);
@@ -222,8 +232,8 @@ describe("Employee API", () => {
         // act & assert
         supertest(app)
           .delete("/api/employee/0x6")
-          .set("x-apitoken", apitoken)
           .set("Accept", "application/json")
+          .auth("admin", process.env.ADMIN_PASS)
           .expect(204)
           .end(done);
       })
@@ -234,8 +244,8 @@ describe("Employee API", () => {
       // act & assert
       supertest(app)
         .delete("/api/employee/0x100")
-        .set("x-apitoken", apitoken)
         .set("Accept", "application/json")
+        .auth("admin", process.env.ADMIN_PASS)
         .expect(404)
         .end(done);
     });
