@@ -31,7 +31,7 @@ describe("Employee API", () => {
     done();
   });
 
-  describe("POST /api/employee", () => {
+  describe("POST /app/api/employee", () => {
     it("should response 201 code when everything ok", (done) => {
       // setup
       let employee = {
@@ -43,9 +43,9 @@ describe("Employee API", () => {
 
       // act & assert
       supertest(app)
-        .post("/api/employee")
+        .post("/app/api/employee")
         .set("Accept", "application/json")
-        .auth("admin", process.env.ADMIN_PASS)
+        .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
         .send(employee)
         .expect("Content-Type", /json/)
         .expect(201)
@@ -72,9 +72,9 @@ describe("Employee API", () => {
 
         // act & assert
         supertest(app)
-          .post("/api/employee")
+          .post("/app/api/employee")
           .set("Accept", "application/json")
-          .auth("admin", process.env.ADMIN_PASS)
+          .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
           .send(employee)
           .expect("Content-Type", /json/)
           .expect(409)
@@ -102,9 +102,9 @@ describe("Employee API", () => {
 
         // act & assert
         supertest(app)
-          .post("/api/employee")
+          .post("/app/api/employee")
           .set("Accept", "application/json")
-          .auth("admin", process.env.ADMIN_PASS)
+          .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
           .send(employee)
           .expect("Content-Type", /json/)
           .expect(201)
@@ -116,14 +116,50 @@ describe("Employee API", () => {
     });
   });
 
-/*
-  describe("PUT /api/employee", () => {
-    it("", (done) => {
+  describe("PUT /app/api/employee", () => {
+    it("should change the 'name' value", (done) => {
+      // setup
+      let employee = {
+        id : "0x77",
+        name : "Milton Santos",
+        email: "milton@server.com",
+        department: "Geografia"
+      };
 
+      db.put({
+        _id : employee.id,
+        name : employee.name,
+        email: employee.email,
+        department: employee.department
+      })
+      .then(() => {
+        // act & assert
+        return supertest(app)
+          .put("/app/api/employee")
+          .set("Accept", "application/json")
+          .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
+          .send({
+            id : employee.id,
+            name : "changed name",
+            email: employee.email,
+            department: employee.department
+          })
+          .expect("Content-Type", /json/)
+          .expect(201);
+      })
+      .then(() => {
+        db.get(employee.id)
+          .then((doc) => {
+            expect(doc.name).to.equal("changed name");
+            cleanup(["0x77"], null, null, done);
+          })
+          .catch(done);
+      })
+      .catch(done);
     });
   });
-*/
-  describe("GET /api/employee", () => {
+
+  describe("GET /app/api/employee", () => {
     it("should return all documents", (done) => {
       // setup
       db.put({
@@ -143,9 +179,9 @@ describe("Employee API", () => {
       .then(() => {
         // act & assert
         supertest(app)
-          .get("/api/employee")
+          .get("/app/api/employee")
           .set("Accept", "application/json")
-          .auth("admin", process.env.ADMIN_PASS)
+          .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
           .expect("Content-Type", /json/)
           .expect(200)
           .expect((res) => {
@@ -161,9 +197,9 @@ describe("Employee API", () => {
     it("should return an empty list when there is no employees", (done) => {
       // act & assert
       supertest(app)
-        .get("/api/employee")
+        .get("/app/api/employee")
         .set("Accept", "application/json")
-        .auth("admin", process.env.ADMIN_PASS)
+        .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
         .expect("Content-Type", /json/)
         .expect(200)
         .expect((res) => {
@@ -192,9 +228,9 @@ describe("Employee API", () => {
       .then(() => {
         // act & assert
         supertest(app)
-          .get("/api/employee/0x5")
+          .get("/app/api/employee/0x5")
           .set("Accept", "application/json")
-          .auth("admin", process.env.ADMIN_PASS)
+          .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
           .expect("Content-Type", /json/)
           .expect(200)
           .expect((res) => {
@@ -210,16 +246,16 @@ describe("Employee API", () => {
     it("should response 404 code when using a non-existent id", (done) => {
       // act & assert
       supertest(app)
-        .get("/api/employee/0x100")
+        .get("/app/api/employee/0x100")
         .set("Accept", "application/json")
-        .auth("admin", process.env.ADMIN_PASS)
+        .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
         .expect("Content-Type", /json/)
         .expect(404)
         .end(done);
     });
   });
 
-  describe("DELETE /api/employee/:id", () => {
+  describe("DELETE /app/api/employee/:id", () => {
     it("should response 204 code when delete succeeded", (done) => {
       // setup
       db.put({
@@ -231,9 +267,9 @@ describe("Employee API", () => {
       .then(() => {
         // act & assert
         supertest(app)
-          .delete("/api/employee/0x6")
+          .delete("/app/api/employee/0x6")
           .set("Accept", "application/json")
-          .auth("admin", process.env.ADMIN_PASS)
+          .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
           .expect(204)
           .end(done);
       })
@@ -243,9 +279,9 @@ describe("Employee API", () => {
     it("should response 404 code when using a non-existent id", (done) => {
       // act & assert
       supertest(app)
-        .delete("/api/employee/0x100")
+        .delete("/app/api/employee/0x100")
         .set("Accept", "application/json")
-        .auth("admin", process.env.ADMIN_PASS)
+        .auth(process.env.ADMIN_USER, process.env.ADMIN_PASS)
         .expect(404)
         .end(done);
     });
