@@ -51,8 +51,8 @@ docker run -p 3000:3000 \
 
 We are using the [pouchdb](https://pouchdb.com/), which is based on
 [leveldb](https://github.com/google/leveldb). If your are starting this app
-using Docker, please, take care about the `/data` volume mapping, that concern
-will guarantee the persistent data if you remove the container.
+using Docker, please, take care about the `employee_data` volume mapping,
+that concern will guarantee the persistent data if you remove the container.
 
 But, if you are starting it without docker, do not delete the `employeedb`
 directory, that will be created on the very first run.
