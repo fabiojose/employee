@@ -1,6 +1,8 @@
 var PouchDB = require("pouchdb");
 var express = require("express");
 
+const logger = require("../logger.js");
+
 var {
   db,
   del
@@ -10,8 +12,8 @@ var router = express.Router();
 
 // Create Employee
 router.post("/employee", (req, res) => {
-  console.log("> > > POST ");
-  console.log(req.body);
+  logger.debug("> > > POST ");
+  logger.debug(req.body);
 
   let employee = req.body;
   db.put({
@@ -37,8 +39,8 @@ router.post("/employee", (req, res) => {
 // Update Employee
 // TODO testing
 router.put("/employee", (req, res) => {
-  console.log("> > > PUT");
-  console.log(req.body);
+  logger.debug("> > > PUT");
+  logger.debug(req.body);
 
   let employee = req.body;
 
@@ -69,8 +71,8 @@ router.put("/employee", (req, res) => {
 
 // Read Employees
 router.get("/employee", (req, res) => {
-  console.log("> > > GET all");
-  console.log(req.headers);
+  logger.debug("> > > GET all");
+  logger.debug(req.headers);
 
   return db.allDocs({
     include_docs: true
@@ -100,7 +102,7 @@ router.get("/employee", (req, res) => {
 
 // Read Employee by id
 router.get("/employee/:id", (req, res) => {
-  console.log("> > > GET", req.params.id);
+  logger.debug("> > > GET", req.params.id);
 
   return db.get(req.params.id)
     .then((doc) => {
@@ -121,7 +123,7 @@ router.get("/employee/:id", (req, res) => {
 
 // Delete Employee
 router.delete("/employee/:id", (req, res) => {
-  console.log("> > > DELETE", req.params.id);
+  logger.debug("> > > DELETE", req.params.id);
 
   return del([req.params.id])
     .then((result) => {

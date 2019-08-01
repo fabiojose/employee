@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "ADMIN_USER=acme ADMIN_PASS=4cme DB_ADAPTER=memory ./node_modules/.bin/mocha ./tests --recursive -C"
+    "test": "LOG_LEVEL=info ADMIN_USER=acme ADMIN_PASS=4cme DB_ADAPTER=memory ./node_modules/.bin/mocha ./tests --recursive -C"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
     "express": "^4.17.1",
     "passport": "^0.4.0",
     "passport-http": "^0.3.0",
-    "pouchdb": "^7.1.1"
+    "pouchdb": "^7.1.1",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
