@@ -26,10 +26,14 @@
         <section class="login--section">
           <form class='login--form' @submit.prevent='makeAuth'>
             <div class="form-group">
-              <input type="text" class="form-control" placeholder='username' required @focus='inputFocus' />
+              <input type="text" class="form-control" placeholder='username'
+                     required @focus='inputFocus'
+                     v-model="user.name"/>
             </div>
             <div class="form-group">
-              <input type="password" class="form-control" placeholder='password' @focus='inputFocus' required />
+              <input type="password" class="form-control" placeholder='password'
+                     @focus='inputFocus' required
+                     v-model="user.pass"/>
             </div>
             <div class="form-group">
               <button type='submit' class="btn btn-primary">Login</button>
@@ -159,6 +163,9 @@
 
   <script src='https://unpkg.com/vue@2.0.0/dist/vue.js'></script>
   <script src='https://unpkg.com/vue-router@2.0.0/dist/vue-router.js'></script>
+  <script src='https://unpkg.com/base-64@0.1.0/base64.js'></script>
+  <script src='https://unpkg.com/axios@0.19.0/dist/axios.js'></script>
+
   <script src="./app.js"></script>
 
 </body>

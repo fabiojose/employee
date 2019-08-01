@@ -4,7 +4,15 @@ var employees = [
   {id: 3, name: 'React', email: 'A JavaScript Library for building user interfaces.', department: "ecomerce"}
 ];
 
+const EMPTY_RECORD = {
+  id: '',
+  name: '',
+  email: '',
+  department: ''
+};
+
 const MAIN = "/list";
+var apitoken;
 
 function findEmployee (employeeId) {
   return employees[findEmployeeKey(employeeId)];
@@ -21,7 +29,13 @@ function findEmployeeKey (employeeId) {
 var Login = Vue.extend({
   template: '#login',
   data: function() {
-    return {note: ""};
+    return {
+      note: "",
+      user: {
+        name: "",
+        pass: ""
+      }
+    };
   },
   watch: {
     note() {
@@ -36,9 +50,22 @@ var Login = Vue.extend({
   },
   methods: {
     makeAuth(e) {
-      // write you own auth logic here
-      router.push(MAIN);
-      this.note = 'Login failed';
+      let self = this;
+      let basic = base64.encode(this.user.name + ":" + this.user.pass);
+
+      axios.post("api/login", {
+        headers : {
+          "Authorization": "Basic " + basic
+        }
+      })
+      .then((res) => {
+        console.log(res.data);
+        apitoken = res.data.apitoken;
+        router.push(MAIN);
+      })
+      .catch((err) => {
+        self.note = 'Login failed';
+      });
     },
     inputFocus() {
       this.note = '';
@@ -49,33 +76,68 @@ var Login = Vue.extend({
 var List = Vue.extend({
   template: '#employee-list',
   data: function () {
-    return {employees: employees, searchKey: ''};
+    return {
+      employees: employees,
+      searchKey: ''
+    };
   },
   computed: {
     filteredEmployees() {
       return this.employees.filter( (employee) => {
       	return employee.name.indexOf(this.searchKey) > -1
-        //return !employee.name.indexOf(this.searchKey)
       })
     }
+  },
+  mounted() {
+    axios.get("api/employee")
+      .then((res) => {
+        this.employees = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 });
 
 var Employee = Vue.extend({
   template: '#employee',
   data: function () {
-    return {employee: findEmployee(this.$route.params.employee_id)};
+    return {
+      //employee: findEmployee(this.$route.params.employee_id)
+      employee: {
+        id: '',
+        name: '',
+        email: '',
+        department: ''
+      }
+    };
+  },
+  mounted() {
+    axios.get("api/employee/" + this.$route.params.employee_id)
+      .then((res) => {
+        console.log(res);
+        this.employee = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 });
 
 var EmployeeEdit = Vue.extend({
   template: '#employee-edit',
   data: function () {
-    return {employee: findEmployee(this.$route.params.employee_id)};
+    // employee: findEmployee(this.$route.params.employee_id)
+    return {
+      employee: {
+        name: '',
+        email: '',
+        department: ''
+      }
+    };
   },
   methods: {
     updateEmployee: function () {
-      //Obsolete, employee is available directly from data...
       let employee = this.employee; //var employee = this.$get('employee');
       employees[findEmployeeKey(employee.id)] = {
         id: employee.id,
@@ -85,39 +147,76 @@ var EmployeeEdit = Vue.extend({
       };
       router.push(MAIN);
     }
+  },
+  mounted() {
+    axios.get("api/employee/" + this.$route.params.employee_id)
+      .then((res) => {
+        console.log(res);
+        this.employee = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 });
 
 var EmployeeDelete = Vue.extend({
   template: '#employee-delete',
   data: function () {
-    return {employee: findEmployee(this.$route.params.employee_id)};
+    return {
+      employee: {
+        name: '',
+        email: '',
+        department: ''
+      }
+    };
   },
   methods: {
     deleteEmployee: function () {
-      employees.splice(findEmployeeKey(this.$route.params.employee_id), 1);
-      router.push(MAIN);
+      //employees.splice(findEmployeeKey(this.$route.params.employee_id), 1);
+      axios.delete("api/employee/" + this.$route.params.employee_id)
+        .then((res) => {
+          router.push(MAIN);
+        })
+        .catch(console.log);
     }
+  },
+  mounted() {
+    axios.get("api/employee/" + this.$route.params.employee_id)
+      .then((res) => {
+        console.log(res);
+        this.employee = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 });
 
 var AddEmployee = Vue.extend({
   template: '#add-employee',
   data: function () {
-    return {employee: {name: '', email: '', department: ''}
+    return {
+      employee: {
+        name: '',
+        email: '',
+        department: ''
+      }
     }
   },
   methods: {
     createEmployee: function() {
-      //Obsolete, employee is available directly from data...
       let employee = this.employee; //var employee = this.$get('employee');
-      employees.push({
+
+      axios.post("/api/employee",{
         id: Math.random().toString().split('.')[1],
         name: employee.name,
         email: employee.email,
         department: employee.department
+      })
+      .then((res) => {
+        router.push(MAIN);
       });
-      router.push(MAIN);
     }
   }
 });
