@@ -11,6 +11,14 @@ username: admin
 password: adm1n
 ```
 
+:warning: **Warning** :warning:
+
+>Do not use this app in production
+
+**You may encounter security issues!**
+
+This is just for fun! :smiley:
+
 ## Starting Using Docker
 
 ## Starting Without Docker
