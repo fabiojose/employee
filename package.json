@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/fabiojose/employee#readme",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "passport": "^0.4.0",
     "passport-http": "^0.3.0",
     "pouchdb": "^7.1.1",
